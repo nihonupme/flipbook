@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Flip Book</title>
+
+<style>
+body {
+    margin: 0;
+    background: #333;
+}
+
+/* PC用：ページめくり */
+#book {
+    width: 1200px;
+    height: 856px;
+}
+
+.page {
+    background: white;
+    overflow: hidden;
+}
+
+.page img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+/* スマホ用：縦スクロール */
+#scrollBook {
+    display: none;
+    width: 100%;
+}
+
+#scrollBook img {
+    width: 100%;
+    height: auto;
+    display: block;
+    margin-bottom: 12px;
+    background: white;
+}
+
+.flip-mode {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+.scroll-mode {
+    overflow-y: auto;
+}
+</style>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/page-flip/dist/css/page-flip.css">
+<script src="https://cdn.jsdelivr.net/npm/page-flip/dist/js/page-flip.browser.min.js"></script>
+</head>
+
+<body>
+
+<div id="book">
+    <div class="page"><img src="page1.jpeg"></div>
+    <div class="page"><img src="page2.jpeg"></div>
+    <div class="page"><img src="page3.jpeg"></div>
+    <div class="page"><img src="page4.jpeg"></div>
+    <div class="page"><img src="page5.jpeg"></div>
+    <div class="page"><img src="page6.jpeg"></div>
+    <div class="page"><img src="page7.jpeg"></div>
+    <div class="page"><img src="page8.jpeg"></div>
+</div>
+
+<div id="scrollBook">
+    <img src="page1.jpeg">
+    <img src="page2.jpeg">
+    <img src="page3.jpeg">
+    <img src="page4.jpeg">
+    <img src="page5.jpeg">
+    <img src="page6.jpeg">
+    <img src="page7.jpeg">
+    <img src="page8.jpeg">
+</div>
+
+<script>
+const images = [
+    "page1.jpeg",
+    "page2.jpeg",
+    "page3.jpeg",
+    "page4.jpeg",
+    "page5.jpeg",
+    "page6.jpeg",
+    "page7.jpeg",
+    "page8.jpeg"
+];
+
+let pageFlip = null;
+
+function setupView() {
+    const isPortrait = window.innerHeight > window.innerWidth;
+
+    const book = document.getElementById("book");
+    const scrollBook = document.getElementById("scrollBook");
+
+    if (isPortrait) {
+        document.body.className = "scroll-mode";
+
+        book.style.display = "none";
+        scrollBook.style.display = "block";
+
+    } else {
+        document.body.className = "flip-mode";
+
+        scrollBook.style.display = "none";
+        book.style.display = "block";
+
+        if (!pageFlip) {
+            pageFlip = new St.PageFlip(book, {
+                width: 600,
+                height: 856,
+                size: "fixed",
+                showCover: true,
+                mobileScrollSupport: false
+            });
+
+            pageFlip.loadFromHTML(
+                document.querySelectorAll(".page")
+            );
+        }
+    }
+}
+
+setupView();
+
+window.addEventListener("resize", function() {
+    location.reload();
+});
+</script>
+
+</body>
+</html>
